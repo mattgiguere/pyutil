@@ -6,7 +6,6 @@ Created on 2014-11-10T15:05:21
 
 from __future__ import division, print_function
 import sys
-import argparse
 
 try:
     import numpy as np
@@ -44,7 +43,7 @@ plt.rcParams.update(params)
 
 
 def blazeFit(wav, spec, maxrms, numcalls=10, curcall=0,
-             verbose=False, showPlot=False):
+             verbose=False, showplot=False):
     """PURPOSE: To fit the continuum of an order of an
     echelle spectrum to model the Blaze Function.
     INPUTS:
@@ -59,7 +58,7 @@ def blazeFit(wav, spec, maxrms, numcalls=10, curcall=0,
     CURCALL: Store the current iteration for recursive purposes.
     VERBOSE: Set this to True to print out the iteration, residual
     rms and the threshold value.
-    showPlot: Set this to True to produce a plot of the spectrum,
+    SHOWPLOT: Set this to True to produce a plot of the spectrum,
     threshold and continuum at every iteration.
     """
     #get wavelength range:
@@ -82,7 +81,7 @@ def blazeFit(wav, spec, maxrms, numcalls=10, curcall=0,
     #next iteration.
     thresh = cfit(wavcent) - (0.5 * (1. / (curcall + 1)))
 
-    if (showPlot is True):
+    if (showplot is True):
         #plot the original spectrum:
         plt.plot(wavcent, normspec)
         #overplot the continuum fit
@@ -102,26 +101,8 @@ def blazeFit(wav, spec, maxrms, numcalls=10, curcall=0,
         z = blazeFit(wavcent[mask], normspec[mask], maxrms,
                      numcalls=numcalls, curcall=curcall+1)
 
+    #now un-center the wavelength range:
+    #if curcall == 0:
+        #z[-1] = z[-1] - min(wav) - wavspread/2.
+
     return z
-
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
-        description='argparse object.')
-    parser.add_argument(
-        'arg1',
-        help='This argument does something.')
-    parser.add_argument(
-        'arg2',
-        help='This argument does something else. By specifying ' +
-             'the "nargs=>" makes this argument not required.',
-             nargs='?')
-    if len(sys.argv) > 3:
-        print('use the command')
-        print('python blazeFit.py arg1 arg2')
-        sys.exit(2)
-
-    args = parser.parse_args()
-
-    blazeFit(int(args.arg1), args.arg2)
- 
