@@ -30,7 +30,7 @@ params = {
     #'backend': 'png',
     'axes.linewidth': 1.5,
     'axes.labelsize': 24,
-    'text.fontsize': 22,
+    'font.size': 22,
     'legend.fontsize': 14,
     'xtick.labelsize': 16,
     'ytick.labelsize': 16,
