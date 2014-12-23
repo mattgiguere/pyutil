@@ -26,19 +26,6 @@ __email__ = "matthew.giguere@yale.edu"
 __status__ = " Development NOT(Prototype or Production)"
 __version__ = '0.0.1'
 
-params = {
-    #'backend': 'png',
-    'axes.linewidth': 1.5,
-    'axes.labelsize': 24,
-    'font.size': 22,
-    'legend.fontsize': 14,
-    'xtick.labelsize': 16,
-    'ytick.labelsize': 16,
-    'text.usetex': False,
-    'font.family': 'Arial Black'
-}
-plt.rcParams.update(params)
-
 
 def blazeFit(wav, spec, maxrms, numcalls=10, curcall=0,
              verbose=False, showplot=False):
