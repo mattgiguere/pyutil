@@ -71,19 +71,21 @@ def pearsonBootstrapPvalue(xarr, yarr, numsamp=1e4, plot=False):
     #    pval = len(np.where(rhoarr <= rhoinit[0])[0]) / numsamp * 2.
     print('number of permutations greater than the original: {0}'.format(numgreater))
     if plot:
-        plt.hist(rhoarr, bins=50, color='#6D92D2', edgecolor='#164BA7')
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        ax.hist(rhoarr, bins=50, color='#6D92D2', edgecolor='#164BA7')
         if (numgreater > 2):
             #superimpose the permutations greater than the original in salmon:
             plt.hist(rhoarr[np.abs(rhoarr) >= np.abs(rhoinit[0])], bins=50, color='#FD9D76', edgecolor='#FC4F1A') 
             #superimpose the permutations greater than the original in aquamarine:
             #plt.hist(rhoarr[np.abs(rhoarr) >= np.abs(rhoinit[0])], bins=50, color='#66D5AA', edgecolor='#1DAB6D') 
         plt.xlabel(r'Pearson Correlation Coefficient ($\rho$)')
-        plt.ylabel('Number of Permutations')
+        ax.set_ylabel('Number of Permutations')
         plt.axvline(rhoinit[0], color='#FC4F1A', alpha=0.75, lw=2.)
         plt.axvline(-1. * rhoinit[0], color='#FC4F1A', alpha=0.75, lw=2.)
-        textstr = '$\\rho$ = {0:.2f} \n p-value = {1:.2f}'.format(rhoinit[0], pval)
+        textstr = '$\\rho$ = {0:.2f} \n p-value = {1:.4f}'.format(rhoinit[0], pval)
         props = dict(boxstyle='square', facecolor='white', alpha=0.5)
-        plt.text(0.05, 0.95, textstr, transform=plt.transAxes, bbox=props,
+        ax.text(0.05, 0.95, textstr, transform=ax.transAxes, bbox=props,
                  fontsize=14, verticalalignment='top')
 
     return rhoinit[0], pval
