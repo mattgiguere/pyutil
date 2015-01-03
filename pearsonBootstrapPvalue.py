@@ -33,7 +33,10 @@ __status__ = " Development NOT(Prototype or Production)"
 __version__ = '0.0.1'
 
 
-def pearsonBootstrapPvalue(xarr, yarr, numsamp=1e4, plot=False):
+def pearsonBootstrapPvalue(xarr, yarr, numsamp=1e4, plot=False,
+                           savefig=False,
+                           figName='PearsonBootstrapPlot.eps',
+                           pvaldecs=4):
     """Calculate and return the pearson correlation coefficient and
        associated p-value using a bootstrap approach.
 
@@ -51,6 +54,11 @@ def pearsonBootstrapPvalue(xarr, yarr, numsamp=1e4, plot=False):
             rho values from the bootstrap analysis with the values
             more extreme than the original p-value highlighted in
             orange.
+        savefig: Set to True if you want to save the histogram.
+            See the 'plot' description for more information.
+        figName: The name of the output figure if savefig is set.
+        pvaldecs: The number of decimals to include in the 
+            p-value output.
 
         Output:
         rho: the original Pearson linear correlation coefficient based
@@ -76,16 +84,22 @@ def pearsonBootstrapPvalue(xarr, yarr, numsamp=1e4, plot=False):
         ax.hist(rhoarr, bins=50, color='#6D92D2', edgecolor='#164BA7')
         if (numgreater > 2):
             #superimpose the permutations greater than the original in salmon:
-            plt.hist(rhoarr[np.abs(rhoarr) >= np.abs(rhoinit[0])], bins=50, color='#FD9D76', edgecolor='#FC4F1A') 
-            #superimpose the permutations greater than the original in aquamarine:
-            #plt.hist(rhoarr[np.abs(rhoarr) >= np.abs(rhoinit[0])], bins=50, color='#66D5AA', edgecolor='#1DAB6D') 
+            plt.hist(rhoarr[np.abs(rhoarr) >= np.abs(rhoinit[0])],
+                     bins=50, color='#FD9D76', edgecolor='#FC4F1A')
+            #superimpose the permutations greater
+            #than the original in aquamarine:
+            #plt.hist(rhoarr[np.abs(rhoarr) >= np.abs(rhoinit[0])],
+            #         bins=50, color='#66D5AA', edgecolor='#1DAB6D')
         plt.xlabel(r'Pearson Correlation Coefficient ($\rho$)')
         ax.set_ylabel('Number of Permutations')
         plt.axvline(rhoinit[0], color='#FC4F1A', alpha=0.75, lw=2.)
         plt.axvline(-1. * rhoinit[0], color='#FC4F1A', alpha=0.75, lw=2.)
-        textstr = '$\\rho$ = {0:.2f} \n p-value = {1:.4f}'.format(rhoinit[0], pval)
+        textstr = '$\\rho$ = {0:.2f} \n p-value = {1}'.format(rhoinit[0], round(pval, pvaldecs))
         props = dict(boxstyle='square', facecolor='white', alpha=0.5)
         ax.text(0.05, 0.95, textstr, transform=ax.transAxes, bbox=props,
                  fontsize=14, verticalalignment='top')
+
+        if savefig is True:
+            plt.savefig(figName)
 
     return rhoinit[0], pval
