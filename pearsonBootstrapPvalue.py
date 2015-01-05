@@ -57,7 +57,7 @@ def pearsonBootstrapPvalue(xarr, yarr, numsamp=1e4, plot=False,
         savefig: Set to True if you want to save the histogram.
             See the 'plot' description for more information.
         figName: The name of the output figure if savefig is set.
-        pvaldecs: The number of decimals to include in the 
+        pvaldecs: The number of decimals to include in the
             p-value output.
 
         Output:
