@@ -8,6 +8,7 @@ from __future__ import division, print_function
 import sys
 import argparse
 import subprocess
+from sqlalchemy import create_engine
 
 try:
     import pymysql
@@ -32,19 +33,31 @@ def getAeroDir():
     return adir
 
 
-def connectChironDB():
+def connectChironDB(legacy=False):
     """connect to the database"""
     #retrieve credentials:
     adir = getAeroDir()
     credsf = open(adir+'.credentials/SQL/csaye', 'r')
     creds = credsf.read().split('\n')
-    conn = pymysql.connect(host=creds[0],
-                           port=int(creds[1]),
-                           user=creds[2],
-                           passwd=creds[3],
-                           db=creds[4])
-    #cur = conn.cursor()
-    return conn
+    if legacy:
+        conn = pymysql.connect(host=creds[0],
+                               port=int(creds[1]),
+                               user=creds[2],
+                               passwd=creds[3],
+                               db=creds[4])
+        #cur = conn.cursor()
+        return conn
+    else:
+        #example:
+        #mysql+pymysql://<username>:<password>@<host>/<dbname>[?<options>]
+        cmd = "mysql+pymysql://"
+        cmd += creds[2]+':'
+        cmd += creds[3]+'@'
+        cmd += creds[0]+'/'
+        cmd += creds[4]
+
+        engine = create_engine(cmd)
+        return engine
 
 
 if __name__ == '__main__':
