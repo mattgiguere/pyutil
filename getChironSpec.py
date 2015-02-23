@@ -57,24 +57,30 @@ def getChironSpec(obnm, normalized=True, slit='slit', normmech='flat'):
         flathdu = fits.open(flatfn)
         flatdata = flathdu[0].data
 
-        #now retrieve the normalized polynomial fit to the master flat:
-        normfit = flatdata[2, 61 - ord, :]/np.max(flatdata[2, 61 - ord, :])
+        #create a 2D array to store the output (wav/spec, #orders, px/order):
+        normspecout = np.zeros([2, flatdata.shape[1], flatdata.shape[2]])
 
-        #superimpose stellar spec
-        normspec_init = scidata[ord, :, 1]/np.max(scidata[ord, :, 1])
-        normspec = normspec_init/normfit[::-1]
+        #cycle through orders
+        for ord in range(flatdata.shape[1]):
+            #now retrieve the normalized polynomial fit to the master flat:
+            normfit = flatdata[2, 61 - ord, :]/np.max(flatdata[2, 61 - ord, :])
 
-        #determine the number of maximum values to
-        #use in the normalization. In this case we
-        #will use the top 0.5%, which corresponds
-        #to 16 elements for CHIRON:
-        nummax = np.int(np.ceil(0.005 * len(normspec)))
-        #now sort normspec and find the mean of the
-        #`nummax` highest values in the old normspec
-        mnhghval = np.mean(np.sort(normspec)[-nummax:-1])
-        #now renormalize by that value:
-        normspec = normspec / mnhghval
-        return normspec
+            #superimpose stellar spec
+            normspec_init = scidata[ord, :, 1]/np.max(scidata[ord, :, 1])
+            normspec = normspec_init/normfit[::-1]
+
+            #determine the number of maximum values to
+            #use in the normalization. In this case we
+            #will use the top 0.5%, which corresponds
+            #to 16 elements for CHIRON:
+            nummax = np.int(np.ceil(0.005 * len(normspec)))
+            #now sort normspec and find the mean of the
+            #`nummax` highest values in the old normspec
+            mnhghval = np.mean(np.sort(normspec)[-nummax:-1])
+            #now renormalize by that value:
+            normspecout[1, ord, :] = normspec / mnhghval
+            normspecout[0, ord, :] = scidata[ord, :, 0]
+        return normspecout
     else:
         return scidata
 
