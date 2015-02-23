@@ -35,7 +35,7 @@ __status__ = " Development NOT(Prototype or Production)"
 __version__ = '0.0.1'
 
 
-def getChironSpec(obnm, normalized=True, slit='slit', normmech='flat'):
+def getChironSpec(obnm, normalized=True, slit='slit', normmech='flat', returnFlat=False):
     """PURPOSE: To retrieve a CHIRON spectrum given the observation
     name (obnm)."""
 
@@ -58,12 +58,15 @@ def getChironSpec(obnm, normalized=True, slit='slit', normmech='flat'):
         flatdata = flathdu[0].data
 
         #create a 2D array to store the output (wav/spec, #orders, px/order):
-        normspecout = np.zeros([2, flatdata.shape[1], flatdata.shape[2]])
+        normspecout = np.zeros([flatdata.shape[1], flatdata.shape[2], 2])
+        normflatout = np.zeros([flatdata.shape[1], flatdata.shape[2], 2])
 
         #cycle through orders
         for ord in range(flatdata.shape[1]):
             #now retrieve the normalized polynomial fit to the master flat:
             normfit = flatdata[2, 61 - ord, :]/np.max(flatdata[2, 61 - ord, :])
+            normflatout[ord, :, 1] = flatdata[1, 61 - ord, :]/np.max(flatdata[1, 61 - ord, :])
+            normflatout[ord, :, 0] = scidata[ord, :, 0]
 
             #superimpose stellar spec
             normspec_init = scidata[ord, :, 1]/np.max(scidata[ord, :, 1])
@@ -78,9 +81,12 @@ def getChironSpec(obnm, normalized=True, slit='slit', normmech='flat'):
             #`nummax` highest values in the old normspec
             mnhghval = np.mean(np.sort(normspec)[-nummax:-1])
             #now renormalize by that value:
-            normspecout[1, ord, :] = normspec / mnhghval
-            normspecout[0, ord, :] = scidata[ord, :, 0]
-        return normspecout
+            normspecout[ord, :, 1] = normspec / mnhghval
+            normspecout[ord, :, 0] = scidata[ord, :, 0]
+        if returnFlat:
+            return normflatout
+        else:
+            return normspecout
     else:
         return scidata
 
