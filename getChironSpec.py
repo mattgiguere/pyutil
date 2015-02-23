@@ -35,18 +35,21 @@ __status__ = " Development NOT(Prototype or Production)"
 __version__ = '0.0.1'
 
 
-def getChironSpec(obnm, normalized=True, slit='slit'):
+def getChironSpec(obnm, normalized=True, slit='slit', normmech='flat'):
     """PURPOSE: To retrieve a CHIRON spectrum given the observation
     name (obnm)."""
 
-#    #extract the date (yymmdd) from the obnm:
+    #extract the date (yymmdd) from the obnm:
     date = re.search(r'chi(\d{6})', obnm).group(1)
 
-    #extract the core of the obnm. This will make the code more 
+    #extract the core of the obnm. This will make the code more
     #robust, allowing people to enter the obnm with or without
     #the 'a' or 'chi' or 'fits', etc.
     #output obnm is in the format 'chiyymmdd.####'
     obnm = re.search(r'(chi\d{6}\.\d{4})', obnm).group(1)
+
+    scihdu = fits.open('/tous/mir7/fitspec/'+date+'/a'+obnm+'.fits')
+    scidata = scihdu[0].data
 
     if normalized:
         #generate the flat filename:
@@ -54,14 +57,26 @@ def getChironSpec(obnm, normalized=True, slit='slit'):
         flathdu = fits.open(flatfn)
         flatdata = flathdu[0].data
 
-    scihdu = fits.open('/tous/mir7/fitspec/'+date'/a'+obnm+'.fits')
-    scidata = scihdu[0].data
+        #now retrieve the normalized polynomial fit to the master flat:
+        normfit = flatdata[2, 61 - ord, :]/np.max(flatdata[2, 61 - ord, :])
 
+        #superimpose stellar spec
+        normspec_init = scidata[ord, :, 1]/np.max(scidata[ord, :, 1])
+        normspec = normspec_init/normfit[::-1]
 
-
-
-
-
+        #determine the number of maximum values to
+        #use in the normalization. In this case we
+        #will use the top 0.5%, which corresponds
+        #to 16 elements for CHIRON:
+        nummax = np.int(np.ceil(0.005 * len(normspec)))
+        #now sort normspec and find the mean of the
+        #`nummax` highest values in the old normspec
+        mnhghval = np.mean(np.sort(normspec)[-nummax:-1])
+        #now renormalize by that value:
+        normspec = normspec / mnhghval
+        return normspec
+    else:
+        return scidata
 
 
 if __name__ == '__main__':
