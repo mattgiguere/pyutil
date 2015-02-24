@@ -1,9 +1,10 @@
 pyutil
 ======
 
-Python Utility Files
+####Python Utility Files
+[![Build Status](https://travis-ci.org/mattgiguere/pyutil.svg?branch=master)](https://travis-ci.org/mattgiguere/pyutil)
 
-These are utility files that may be useful for many projects.
+This repository contains python utility files that I have found useful for a number of projects. Most of these routines are related to CHIRON high resolution fiber fed spectroscopy, but you may find some are useful well outside of astronomy/science/academia.
 
 Below are descriptions for the routines in this repository.
 
@@ -29,4 +30,10 @@ The MySQL connection flavor has been deprecated in `pandas` and will be removed 
 from pyutil import connectChironDB as ccdb
 engine = ccdb.connectChironDB()
 ```
+- **getChironSpec.py**: A routine for retrieving and continuum normalizing spectra from the CHIRON Spectrometer. Continuum normalization in this case divides each echelle order by a polynomial fit to the respective order in the master flat field. An example of using `getChironSpec` is shown below.
+```python
+from pyutil.getChironSpec import getChironSpec
+normspec = getChironSpec('chi150223.1125', normalized=True)
+```
+
 - **pearsonBootstrapPvalue.py**: A routine for determining the p-value to the Pearson linear correlation coefficient through a Bootstrap analysis.
