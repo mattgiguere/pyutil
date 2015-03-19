@@ -20,18 +20,23 @@ __status__ = " Development NOT(Prototype or Production)"
 __version__ = '0.0.1'
 
 
+def getNewTimes(times, timebin):
+    """Return the new time array"""
+    numnewtimes = (np.max(times) - np.min(times))/timebin
+    newtimes = np.linspace(np.min(times), np.max(times), numnewtimes)
+    return newtimes
+
+
 def binRvs(df, time="JD", rv="mnvel", unc="errvel", timebin=0.5, phase=0):
     """
-    PURPOSE: A routine to bin RV measurements similar to velplot 
+    PURPOSE: A routine to bin RV measurements similar to velplot
     in IDL.
     """
     times = df[time]
     rvs = df[rv]
     uncs = df[unc]
 
-    numnewtimes = (np.max(times) - np.min(times))/timebin
-    newtimes = np.linspace(np.min(times), np.max(times), )
-
+    newtimes = getNewTimes(times, timebin)
 
     dfdown = df
     return dfdown
