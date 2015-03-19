@@ -20,11 +20,11 @@ __status__ = " Development NOT(Prototype or Production)"
 __version__ = '0.0.1'
 
 
-def getNewTimes(times, timebin):
+def getNewTimes(times, timebin, phase=0):
     """Return the new time array"""
     numnewtimes = (np.max(times) - np.min(times))/timebin
     newtimes = np.linspace(np.min(times), np.max(times), numnewtimes)
-    return newtimes
+    return newtimes + phase * timebin
 
 
 def binRvs(df, time="JD", rv="mnvel", unc="errvel", timebin=0.5, phase=0):
@@ -36,7 +36,7 @@ def binRvs(df, time="JD", rv="mnvel", unc="errvel", timebin=0.5, phase=0):
     rvs = df[rv]
     uncs = df[unc]
 
-    newtimes = getNewTimes(times, timebin)
+    newtimes = getNewTimes(times, timebin, phase=phase)
 
     dfdown = df
     return dfdown

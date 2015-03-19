@@ -33,3 +33,28 @@ def test_getNewTimes_one_day_bin_ten_days():
     print(len(newtimes))
     assert len(newtimes) == 10
 
+
+def test_getNewTimes_with_half_phase_one_day_bin():
+    """
+    Test to make sure times are shifted
+    properly if the phase optional argument
+    is used.
+    """
+    times = np.random.uniform(0, 11, 75)
+    newtimes = br.getNewTimes(times, 1.)
+    newtimes2 = br.getNewTimes(times, 1., phase=0.5)
+    assert (np.min(newtimes2) - np.min(newtimes)) == 0.5
+
+
+def test_getNewTimes_with_half_phase_two_day_bin():
+    """
+    Test to make sure times are shifted
+    properly if the phase optional argument
+    is used with a two day bin.
+    """
+    times = np.random.uniform(0, 11, 75)
+    newtimes = br.getNewTimes(times, 2.)
+    newtimes2 = br.getNewTimes(times, 2., phase=0.5)
+    assert (np.min(newtimes2) - np.min(newtimes)) == 1.0
+
+
