@@ -6,7 +6,6 @@ Created on 2015-03-19T16:19:41
 
 from __future__ import division, print_function
 import sys
-import argparse
 import pyutil.binRvs as br
 
 try:
@@ -56,5 +55,43 @@ def test_getNewTimes_with_half_phase_two_day_bin():
     newtimes = br.getNewTimes(times, 2.)
     newtimes2 = br.getNewTimes(times, 2., phase=0.5)
     assert (np.min(newtimes2) - np.min(newtimes)) == 1.0
+
+
+def test_getNewVals_for_newrvs_dim():
+    """
+    The output dimension of newRVs should be the same as the
+    input dimension of newtimes
+    """
+    newtimes = np.arange(10)
+    times = np.random.uniform(0, 10, 100)
+    rvs = np.random.uniform(-5, 5, 100)
+    uncs = np.random.normal(loc=0, scale=2, size=100)
+    newRVs, newUncs = br.getNewVals(newtimes, times, rvs, uncs, timebin=1.)
+    assert len(newtimes) == len(newRVs)
+
+
+def test_getNewVals_for_newuncs_dim():
+    """
+    The output dimension of newRVs should be the same as the
+    input dimension of newtimes
+    """
+    newtimes = np.arange(10)
+    times = np.random.uniform(0, 10, 100)
+    rvs = np.random.uniform(-5, 5, 100)
+    uncs = np.random.normal(loc=0, scale=2, size=100)
+    newRVs, newUncs = br.getNewVals(newtimes, times, rvs, uncs, timebin=1.)
+    assert len(newtimes) == len(newUncs)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
