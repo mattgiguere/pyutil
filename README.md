@@ -19,18 +19,22 @@ The resulting `fit` array contains the `numpy.polyfit` 7th order polynomial coef
 
 
 - **connectChironDB.py**: A routine for establishing a connection to the CHIRON MySQL database.
-Examples:
-for an SQLAlchemy `mysql+pymysql` engine:
-for a pymysql connection:
+
+  - **Examples**:
+    - For a pymysql connection:
 ```python
 from pyutil import connectChironDB as ccdb
 conn = ccdb.connectChironDB(legacy=True)
 ```
-The MySQL connection flavor has been deprecated in `pandas` and will be removed in a future version. However, MySQL will still be supported through SQLAlchemy. To prepare for this (and get rid of the annoying warning messages), the default object returned from `connectChironDB` is now an SQLAlchemy engine:
+    - For an SQLAlchemy `mysql+pymysql` engine:
+
+      The MySQL connection flavor has been deprecated in `pandas` and will be removed in a future version. However, MySQL will still be supported through SQLAlchemy. To prepare for this (and get rid of the annoying warning messages), the default object returned from `connectChironDB` is now an SQLAlchemy engine:
 ```python
 from pyutil import connectChironDB as ccdb
 engine = ccdb.connectChironDB()
 ```
+
+
 - **getChironSpec.py**: A routine for retrieving and continuum normalizing spectra from the CHIRON Spectrometer. Continuum normalization in this case divides each echelle order by a polynomial fit to the respective order in the master flat field. An example of using `getChironSpec` is shown below.
 ```python
 from pyutil.getChironSpec import getChironSpec
