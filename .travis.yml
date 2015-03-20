@@ -25,9 +25,6 @@ install:
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
-  #these lines are to install coveralls
-  - conda install --yes -n condaenv pip
-  - pip install coveralls
   # Useful for debugging any issues with conda
   - conda info -a
 
