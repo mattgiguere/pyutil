@@ -6,7 +6,6 @@ Created on 2014-12-03T19:07:01
 
 from __future__ import division, print_function
 import sys
-import argparse
 import subprocess
 from sqlalchemy import create_engine
 
@@ -34,7 +33,15 @@ def getAeroDir():
 
 
 def connectChironDB(legacy=False):
-    """connect to the database"""
+    """PURPOSE:
+    A quick and simple function for connecting to the
+    CHIRON MySQL database.
+
+    :param legacy: [optional]
+        If legacy is set, a PyMySQL connection will be returned.
+        Otherwise, a SQLAlchemy engine will be returned. This is
+        to handle the deprecated MySQL connections in pandas.
+    """
     #retrieve credentials:
     adir = getAeroDir()
     credsf = open(adir+'.credentials/SQL/csaye', 'r')
@@ -58,25 +65,3 @@ def connectChironDB(legacy=False):
 
         engine = create_engine(cmd)
         return engine
-
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
-        description='argparse object.')
-    parser.add_argument(
-        'arg1',
-        help='This argument does something.')
-    parser.add_argument(
-        'arg2',
-        help='This argument does something else. By specifying ' +
-             'the "nargs=>" makes this argument not required.',
-             nargs='?')
-    if len(sys.argv) > 3:
-        print('use the command')
-        print('python connectChironDB.py arg1 arg2')
-        sys.exit(2)
-
-    args = parser.parse_args()
-
-    connectChironDB(int(args.arg1), args.arg2)
- 
