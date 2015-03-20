@@ -6,6 +6,7 @@ pyutil
 [![Build Status](https://travis-ci.org/mattgiguere/pyutil.svg?branch=master)](https://travis-ci.org/mattgiguere/pyutil)
 [![Coverage Status](https://coveralls.io/repos/mattgiguere/pyutil/badge.svg?branch=master)](https://coveralls.io/r/mattgiguere/pyutil?branch=master)
 [![Codacy Badge](https://www.codacy.com/project/badge/24f412c6b6c443f8b6693936594811a1)](https://www.codacy.com/public/matthewgiguere/pyutil)
+[![Documentation Status](https://readthedocs.org/projects/pyutil/badge/?version=latest)](https://readthedocs.org/projects/pyutil/?badge=latest)
 
 ###Description
 
