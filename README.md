@@ -4,6 +4,7 @@ pyutil
 ####Python Utility Files
 [![MIT-Lic](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/mattgiguere/pyutil/blob/master/LICENSE)
 [![Build Status](https://travis-ci.org/mattgiguere/pyutil.svg?branch=master)](https://travis-ci.org/mattgiguere/pyutil)
+[![Coverage Status](https://coveralls.io/repos/mattgiguere/pyutil/badge.svg?branch=master)](https://coveralls.io/r/mattgiguere/pyutil?branch=master)
 
 This repository contains python utility files that I have found useful for a number of projects. Most of these routines are related to CHIRON high resolution fiber fed spectroscopy, but you may find some are useful well outside of astronomy/science/academia.
 
