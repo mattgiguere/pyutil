@@ -42,7 +42,7 @@ def test_getNewTimes_with_half_phase_one_day_bin():
     times = np.random.uniform(0, 11, 75)
     newtimes = br.getNewTimes(times, 1.)
     newtimes2 = br.getNewTimes(times, 1., phase=0.5)
-    assert (np.min(newtimes2) - np.min(newtimes)) == 0.5
+    assert np.round((np.min(newtimes2) - np.min(newtimes)), 7) == 0.5
 
 
 def test_getNewTimes_with_half_phase_two_day_bin():
@@ -54,7 +54,7 @@ def test_getNewTimes_with_half_phase_two_day_bin():
     times = np.random.uniform(0, 11, 75)
     newtimes = br.getNewTimes(times, 2.)
     newtimes2 = br.getNewTimes(times, 2., phase=0.5)
-    assert (np.min(newtimes2) - np.min(newtimes)) == 1.0
+    assert np.round((np.min(newtimes2) - np.min(newtimes)), 7) == 1.000
 
 
 def test_getNewVals_for_newrvs_dim():
@@ -65,7 +65,7 @@ def test_getNewVals_for_newrvs_dim():
     newtimes = np.arange(10)
     times = np.random.uniform(0, 10, 100)
     rvs = np.random.uniform(-5, 5, 100)
-    uncs = np.random.normal(loc=0, scale=2, size=100)
+    uncs = np.random.normal(loc=1., scale=0.5, size=100)
     newRVs, newUncs = br.getNewVals(newtimes, times, rvs, uncs, timebin=1.)
     assert len(newtimes) == len(newRVs)
 
@@ -78,9 +78,36 @@ def test_getNewVals_for_newuncs_dim():
     newtimes = np.arange(10)
     times = np.random.uniform(0, 10, 100)
     rvs = np.random.uniform(-5, 5, 100)
-    uncs = np.random.normal(loc=0, scale=2, size=100)
+    uncs = np.random.normal(loc=1., scale=0.5, size=100)
     newRVs, newUncs = br.getNewVals(newtimes, times, rvs, uncs, timebin=1.)
     assert len(newtimes) == len(newUncs)
+
+
+def test_getNewVals_rv_scatter():
+    """
+    The RV scatter (standard deviation from normally distributed points
+    about the mean should be reduced when binning observations down. This
+    routine checks that.
+    """
+    newtimes = np.arange(10)
+    times = np.random.uniform(0, 10, 100)
+    rvs = np.random.normal(loc=0, scale=5, size=100)
+    uncs = np.random.normal(loc=1., scale=0.5, size=100)
+    newRVs, newUncs = br.getNewVals(newtimes, times, rvs, uncs, timebin=1.)
+    assert np.std(newRVs) < np.std(rvs)
+
+
+def test_getNewVals_unc_magnitude():
+    """
+    The median single measurement precision should be lower
+    for the binned data. This function ensures that to be the case.
+    """
+    newtimes = np.arange(10)
+    times = np.random.uniform(0, 10, 100)
+    rvs = np.random.normal(loc=0, scale=5, size=100)
+    uncs = np.random.normal(loc=1., scale=0.5, size=100)
+    newRVs, newUncs = br.getNewVals(newtimes, times, rvs, uncs, timebin=1.)
+    assert np.median(newUncs) < np.median(uncs)
 
 
 

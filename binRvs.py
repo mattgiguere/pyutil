@@ -41,11 +41,11 @@ def getNewVals(newtimes, times, rvs, uncs, timebin):
 
     for idx, ntm in enumerate(newtimes):
         inbin = np.where((times >= (ntm - timebin/2)) &
-                         (times > (ntm + timebin/2)))
+                         (times > (ntm + timebin/2)))[0]
 
         nwgts = uncs[inbin] / np.sum(uncs[inbin])
         newRVs[idx] = np.sum(rvs[inbin] * nwgts)
-        newUncs[idx] = np.mean(uncs[inbin]/np.sqrt(len(inbin)))
+        newUncs[idx] = np.mean(uncs[inbin])/np.sqrt(len(inbin))
 
     return newRVs, newUncs
 
