@@ -26,7 +26,7 @@ git clone https://github.com/mattgiguere/pyutil.git
 
 ###License
 This software is licensed under an MIT license. See the
-[License file][lic] for details.
+[license file][lic] for details.
 
 
 [rtd]: http://pyutil.readthedocs.org/en/latest/

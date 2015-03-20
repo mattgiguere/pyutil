@@ -4,9 +4,9 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Matt's Python Utility Files">
         
-        
-        
+        <link rel="canonical" href="http://pyutil.readthedocs.org/">
         <link rel="shortcut icon" href="./img/favicon.ico">
 
 	<title>pyutil</title>
@@ -33,6 +33,14 @@
         <!-- Collapsed navigation -->
         <div class="navbar-header">
             
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
 
             <!-- Main title -->
             <a class="navbar-brand" href=".">pyutil</a>
@@ -42,6 +50,22 @@
         <div class="navbar-collapse collapse">
             
 
+            
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                
+                
+                
+                <li>
+                    <a href="https://github.com/mattgiguere/pyutil">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
             
         </div>
     </div>
@@ -56,9 +80,9 @@
         
             <li><a href="#a-python-library-of-matts-useful-utility-files">A Python Library of Matt's Useful Utility Files</a></li>
         
-            <li><a href="#commands">Commands</a></li>
+            <li><a href="#project-directory-layout">Project Directory Layout</a></li>
         
-            <li><a href="#project-layout">Project layout</a></li>
+            <li><a href="#code-documentation">Code Documentation</a></li>
         
     
     </ul>
@@ -67,24 +91,62 @@
 
 <h1 id="welcome-to-pyutil">Welcome to pyutil</h1>
 <h3 id="a-python-library-of-matts-useful-utility-files">A Python Library of Matt's Useful Utility Files</h3>
-<h2 id="commands">Commands</h2>
+<h2 id="project-directory-layout">Project Directory Layout</h2>
 <ul>
-<li><code>mkdocs new [dir-name]</code> - Create a new project.</li>
-<li><code>mkdocs serve</code> - Start the live-reloading docs server.</li>
-<li><code>mkdocs build</code> - Build the documentation site.</li>
-<li><code>mkdocs help</code> - Print this help message.</li>
+<li><strong>docs</strong>: This documentation</li>
+<li><strong>tests</strong>: Unit testing code</li>
+<li><strong>pyutil</strong>: The pyutil code</li>
 </ul>
-<h2 id="project-layout">Project layout</h2>
-<pre><code>mkdocs.yml    # The configuration file.
-docs/
-    index.md  # The documentation homepage.
-    ...       # Other markdown pages, images and other files.
-</code></pre></div>
+<h2 id="code-documentation">Code Documentation</h2>
+<ul>
+<li><strong>blazeFit.py</strong>: A recursive routine that fits the blaze function of an echelle spectrum. This is useful for cross correlation or equivalent width determination.
+Example:</li>
+</ul>
+<pre><code class="python">from pyutil.blazeFit import blazeFit
+fit = blazeFit(wav, spec, maxrms, numcalls=150)
+</code></pre>
+
+<p>The resulting <code>fit</code> array contains the <code>numpy.polyfit</code> 7th order polynomial coefficients to the best fit to the continuum, <code>wav</code> is the wavelength, <code>spec</code> is the relative flux, <code>maxrms</code> is the maximum root mean square of the residuals, and <code>numcalls</code> is the maximum number of recursive calls to make. The algorithm will continue until either the rms reaches <code>maxrms</code> or <code>numcalls</code> has been reached, whichever comes first.</p>
+<ul>
+<li>
+<p><strong>connectChironDB.py</strong>: A routine for establishing a connection to the CHIRON MySQL database.</p>
+</li>
+<li>
+<p><strong>Examples</strong>:</p>
+<ul>
+<li>For a pymysql connection:</li>
+</ul>
+</li>
+</ul>
+<pre><code class="python">from pyutil import connectChironDB as ccdb
+conn = ccdb.connectChironDB(legacy=True)
+</code></pre>
+
+<pre><code>- For an SQLAlchemy `mysql+pymysql` engine:
+
+  The MySQL connection flavor has been deprecated in `pandas` and will be removed in a future version. However, MySQL will still be supported through SQLAlchemy. To prepare for this (and get rid of the annoying warning messages), the default object returned from `connectChironDB` is now an SQLAlchemy engine:
+</code></pre>
+<pre><code class="python">from pyutil import connectChironDB as ccdb
+engine = ccdb.connectChironDB()
+</code></pre>
+
+<ul>
+<li><strong>getChironSpec.py</strong>: A routine for retrieving and continuum normalizing spectra from the CHIRON Spectrometer. Continuum normalization in this case divides each echelle order by a polynomial fit to the respective order in the master flat field. An example of using <code>getChironSpec</code> is shown below.</li>
+</ul>
+<pre><code class="python">from pyutil.getChironSpec import getChironSpec
+normspec = getChironSpec('chi150223.1125', normalized=True)
+</code></pre>
+
+<ul>
+<li><strong>pearsonBootstrapPvalue.py</strong>: A routine for determining the p-value to the Pearson linear correlation coefficient through a Bootstrap analysis.</li>
+</ul></div>
             
         </div>
 
         <footer class="col-md-12">
             <hr>
+            
+            <p>Copyright &copy; 2015, Matt Giguere</p>
             
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
