@@ -32,4 +32,5 @@ install:
   - source activate test-environment
   #- python setup.py install
 
-script: nosetests
+script: 
+  - nosetests --with-cov --cov pyutils --cov-config .coveragerc --logging-level=INFO
