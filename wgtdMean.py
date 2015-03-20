@@ -41,7 +41,7 @@ def getNewVals(newtimes, times, rvs, uncs, timebin):
     for idx, ntm in enumerate(newtimes):
         inbin = np.where((times >= (ntm - timebin/2)) &
                          (times < (ntm + timebin/2)))[0]
-        print('idx: {}, inbin: {}, len {}'.format(idx, inbin, len(inbin)))
+        #print('idx: {}, inbin: {}, len {}'.format(idx, inbin, len(inbin)))
 
         if len(inbin) > 0:
             nwgts = uncs[inbin] / np.sum(uncs[inbin])
@@ -54,10 +54,11 @@ def getNewVals(newtimes, times, rvs, uncs, timebin):
     return newRvs, newUncs
 
 
-def binRvs(df, time="JD", rv="mnvel", unc="errvel", timebin=0.5, phase=0):
+def wgtdMeans(df, time="JD", rv="mnvel", unc="errvel", timebin=0.5, phase=0):
     """
-    PURPOSE: A routine to bin RV measurements similar to velplot
-    in IDL.
+    PURPOSE: A routine to bin unevenly sampled heteroscedastic time
+    series data, and output weighted mean of each bin. This routine
+    is similar to velplot in IDL.
     """
     times = df[time].values
     rvs = df[rv].values
