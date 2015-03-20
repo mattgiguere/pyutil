@@ -6,7 +6,7 @@ Created on 2015-03-19T16:19:41
 
 from __future__ import division, print_function
 import sys
-import pyutil.wgtdMean as wm
+from pyutil.pyutil import wgtdMean as wm
 
 try:
     import numpy as np
