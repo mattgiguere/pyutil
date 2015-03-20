@@ -35,18 +35,23 @@ def getNewTimes(times, timebin, phase=0):
 def getNewVals(newtimes, times, rvs, uncs, timebin):
     """Given all the other parameters, this function returns the
     binned weighted RVs and uncertainties"""
-    newRVs = np.zeros(len(newtimes))
+    newRvs = np.zeros(len(newtimes))
     newUncs = np.zeros(len(newtimes))
 
     for idx, ntm in enumerate(newtimes):
         inbin = np.where((times >= (ntm - timebin/2)) &
-                         (times > (ntm + timebin/2)))[0]
+                         (times < (ntm + timebin/2)))[0]
+        print('idx: {}, inbin: {}, len {}'.format(idx, inbin, len(inbin)))
 
-        nwgts = uncs[inbin] / np.sum(uncs[inbin])
-        newRVs[idx] = np.sum(rvs[inbin] * nwgts)
-        newUncs[idx] = np.mean(uncs[inbin])/np.sqrt(len(inbin))
+        if len(inbin) > 0:
+            nwgts = uncs[inbin] / np.sum(uncs[inbin])
+            newRvs[idx] = np.sum(rvs[inbin] * nwgts)
+            newUncs[idx] = np.mean(uncs[inbin])/np.sqrt(len(inbin))
+        else:
+            newRvs[idx] = None
+            newUncs[idx] = None
 
-    return newRVs, newUncs
+    return newRvs, newUncs
 
 
 def binRvs(df, time="JD", rv="mnvel", unc="errvel", timebin=0.5, phase=0):

@@ -140,13 +140,28 @@ def test_binRvs_number_of_rows():
     assert len(dfo) >= 9
 
 
-def test_big_gaps():
+def test_big_gaps_getNewVals():
+    """
+    Ensure getNewVals routine can handle big gaps in times
+    """
+    timebin = 1.
+    times = np.concatenate((np.random.uniform(0, 10, 50),
+                           np.random.uniform(30, 40, 50)))
+    newtimes = br.getNewTimes(times, timebin)
+    rvs = np.random.normal(loc=0, scale=5, size=100)
+    uncs = np.random.normal(loc=1., scale=0.5, size=100)
+    newRVs, newUncs = br.getNewVals(newtimes, times, rvs,
+                                    uncs, timebin=timebin)
+    assert np.median(newUncs) < np.median(uncs)
+
+
+def test_big_gaps_main_routine():
     """
     Test to make sure the code handles big gaps well
     """
     dfi = pd.DataFrame()
-    dfi["JD"] = np.concatenate(np.random.uniform(0, 10, 50),
-                               np.random.uniform(40, 50, 50))
+    dfi["JD"] = np.concatenate((np.random.uniform(0, 10, 50),
+                               np.random.uniform(40, 50, 50)))
     dfi["mnvel"] = np.random.normal(loc=0, scale=5, size=100)
     dfi["errvel"] = np.random.normal(loc=1., scale=0.5, size=100)
     dfo = br.binRvs(dfi, timebin=1.0)
