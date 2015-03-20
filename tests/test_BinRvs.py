@@ -29,11 +29,11 @@ __version__ = '0.0.1'
 
 def test_getNewTimes_one_day_bin_ten_days():
     """
-    Test to make sure `getNewTimes` returns ten times
-    when 75 times are entered over a ten day spane with
+    Test to make sure `getNewTimes` returns ten elements
+    when 75 elements are entered over a ten day span with
     one day binning in place.
     """
-    times = np.random.uniform(0, 11, 75)
+    times = np.random.uniform(0, 10, 75)
     newtimes = br.getNewTimes(times, 1.)
     print(len(newtimes))
     assert len(newtimes) == 10
@@ -45,7 +45,7 @@ def test_getNewTimes_with_half_phase_one_day_bin():
     properly if the phase optional argument
     is used.
     """
-    times = np.random.uniform(0, 11, 75)
+    times = np.random.uniform(0, 10, 75)
     newtimes = br.getNewTimes(times, 1.)
     newtimes2 = br.getNewTimes(times, 1., phase=0.5)
     assert np.round((np.min(newtimes2) - np.min(newtimes)), 7) == 0.5
@@ -57,7 +57,7 @@ def test_getNewTimes_with_half_phase_two_day_bin():
     properly if the phase optional argument
     is used with a two day bin.
     """
-    times = np.random.uniform(0, 11, 75)
+    times = np.random.uniform(0, 10, 75)
     newtimes = br.getNewTimes(times, 2.)
     newtimes2 = br.getNewTimes(times, 2., phase=0.5)
     assert np.round((np.min(newtimes2) - np.min(newtimes)), 7) == 1.000
