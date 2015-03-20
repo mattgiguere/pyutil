@@ -14,6 +14,12 @@ except ImportError:
     print('You need numpy installed')
     sys.exit(1)
 
+try:
+    import pandas as pd
+except ImportError:
+    print('You need pandas installed')
+    sys.exit(1)
+
 __author__ = "Matt Giguere (github: @mattgiguere)"
 __maintainer__ = "Matt Giguere"
 __email__ = "matthew.giguere@yale.edu"
@@ -108,6 +114,30 @@ def test_getNewVals_unc_magnitude():
     uncs = np.random.normal(loc=1., scale=0.5, size=100)
     newRVs, newUncs = br.getNewVals(newtimes, times, rvs, uncs, timebin=1.)
     assert np.median(newUncs) < np.median(uncs)
+
+
+def test_binRvs_number_of_columns():
+    """
+    Test the number of returned columns
+    """
+    dfi = pd.DataFrame()
+    dfi["JD"] = np.random.uniform(0, 10, 100)
+    dfi["mnvel"] = np.random.normal(loc=0, scale=5, size=100)
+    dfi["errvel"] = np.random.normal(loc=1., scale=0.5, size=100)
+    dfo = br.binRvs(dfi, timebin=1.0)
+    assert len(dfo.columns) == 3
+
+
+def test_binRvs_number_of_rows():
+    """
+    Test the number of returned rows
+    """
+    dfi = pd.DataFrame()
+    dfi["JD"] = np.random.uniform(0, 10, 100)
+    dfi["mnvel"] = np.random.normal(loc=0, scale=5, size=100)
+    dfi["errvel"] = np.random.normal(loc=1., scale=0.5, size=100)
+    dfo = br.binRvs(dfi, timebin=1.0)
+    assert len(dfo) >= 9
 
 
 

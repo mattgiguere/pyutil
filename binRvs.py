@@ -28,8 +28,7 @@ __version__ = '0.0.1'
 
 def getNewTimes(times, timebin, phase=0):
     """Return the new time array"""
-    numnewtimes = (np.max(times) - np.min(times))/timebin
-    newtimes = np.linspace(np.min(times), np.max(times), numnewtimes)
+    newtimes = np.arange(np.min(times), np.max(times), timebin)
     return newtimes + phase * timebin
 
 
@@ -60,7 +59,10 @@ def binRvs(df, time="JD", rv="mnvel", unc="errvel", timebin=0.5, phase=0):
     uncs = df[unc].values
 
     newtimes = getNewTimes(times, timebin, phase=phase)
-    newRvs, newUncs = getNewVals(newtimes, rvs, uncs)
+    newRvs, newUncs = getNewVals(newtimes, times, rvs, uncs, timebin)
 
-    dfnew = pd.DataFrame([newtimes, newRvs, newUncs], columns=[time, rv, unc])
+    dfnew = pd.DataFrame()
+    dfnew[time] = newtimes
+    dfnew[rv] = newRvs
+    dfnew[unc] = newUncs
     return dfnew
