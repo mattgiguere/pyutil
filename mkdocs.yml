@@ -2,6 +2,8 @@ site_name: pyutil
 site_url: http://pyutil.readthedocs.org/
 site_description: Matt's Python Utility Files
 
+theme: readthedocs
+
 repo_url: https://github.com/mattgiguere/pyutil
 
 copyright: Copyright &copy; 2015, Matt Giguere
