@@ -6,9 +6,9 @@ Project Directory Layout
 ========================
 
 - **docs**: This documentation
-- **tests**: Unit testing code
 - **pyutil**: The pyutil code
 - **site**: The mkdocs build of this site
+- **tests**: Unit testing code
 
 Code Documentation
 ==================
