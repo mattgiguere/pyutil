@@ -172,6 +172,17 @@ def test_big_gaps_main_routine():
     assert len(dfo) >= 9
 
 
+def test_returnNan_option():
+    """
+    Make sure the returnNan removes NaN elements.
+    """
+    dfi = pd.DataFrame()
+    dfi["JD"] = np.concatenate((np.random.uniform(0, 10, 50),
+                               np.random.uniform(40, 50, 50)))
+    dfi["mnvel"] = np.random.normal(loc=0, scale=5, size=100)
+    dfi["errvel"] = np.random.normal(loc=1., scale=0.5, size=100)
+    dfo = wm.wgtdMeans(dfi, timebin=1.0, returnNan=False)
+    assert len(dfo) == len(dfo[np.isfinite(dfo["mnvel"])])
 
 
 

@@ -20,10 +20,11 @@ except ImportError:
     sys.exit(1)
 
 __author__ = "Matt Giguere (github: @mattgiguere)"
+__license__ = "MIT"
+__version__ = '1.0.0'
 __maintainer__ = "Matt Giguere"
 __email__ = "matthew.giguere@yale.edu"
-__status__ = " Development NOT(Prototype or Production)"
-__version__ = '0.0.1'
+__status__ = "Production"
 
 
 def getNewTimes(times, timebin, phase=0):
@@ -54,11 +55,47 @@ def getNewVals(newtimes, times, rvs, uncs, timebin):
     return newRvs, newUncs
 
 
-def wgtdMeans(df, time="JD", rv="mnvel", unc="errvel", timebin=0.5, phase=0):
+def wgtdMeans(df, time="JD", rv="mnvel", unc="errvel", timebin=0.5,
+              phase=0, returnNan=True):
     """
     PURPOSE: A routine to bin unevenly sampled heteroscedastic time
     series data, and output weighted mean of each bin. This routine
     is similar to velplot in IDL.
+
+    :param df:
+        The input pandas DataFrame with at least three columns:
+            - observation times
+            - observations
+            - uncertainties
+
+    :param time: [Optional]
+        The name of the observation time column. The default value
+        is "JD".
+
+    :param rv: [Optional]
+        The name of the observations column. The default value
+        is "rv".
+
+    :param unc: [Optional]
+        The name of the uncertainties column. If not set, "errvel"
+        is assumed for the column name.
+
+    :param timebin: [Optional]
+        The duration to bin the data over. The units should be the
+        same as the time column. If not set, 0.5 is assumed.
+
+    :param phase: [Optional]
+        The phase offset of the time of the center of the bin. For
+        example, if you specify 3 day bins, and phase=0.5, then the
+        center of the bin will be shifted by 1.5 days from the
+        minimum value in the time column.
+
+    :param returnNan: [Optional]
+        By default wgtdMeans returns a DataFrame with evenly sampled
+        observation times. However, if the data are unevenly sampled
+        many of those bins will be empty, resulting in a value of
+        None. Setting returnNan to False will remove the Nan/None
+        bins and only return finite values.
     """
     times = df[time].values
     rvs = df[rv].values
@@ -71,4 +108,8 @@ def wgtdMeans(df, time="JD", rv="mnvel", unc="errvel", timebin=0.5, phase=0):
     dfnew[time] = newtimes
     dfnew[rv] = newRvs
     dfnew[unc] = newUncs
+
+    if not returnNan:
+        dfnew = dfnew[np.isfinite(dfnew[rv])]
+
     return dfnew
