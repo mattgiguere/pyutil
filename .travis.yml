@@ -32,8 +32,6 @@ install:
 
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy xlrd pandas nose coverage
   - source activate test-environment
-before_script:
-  - export PYTHONPATH=$PYTHONPATH:$(pwd)
 script: 
   - nosetests --with-cov --config .coveragerc --logging-level=INFO
 after_success:
