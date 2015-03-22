@@ -33,7 +33,7 @@ install:
   - source activate test-environment
 before_script:
  - export PYTHONPATH=$PYTHONPATH:$(pwd)
- - export PYTHONPATH=$PYTHONPATH:~/
+ - export PYTHONPATH="$HOME/build/mattgiguere:$PYTHONPATH"
 script: 
   - nosetests --with-cov --config .coveragerc --logging-level=INFO
 after_success:
