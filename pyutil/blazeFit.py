@@ -23,8 +23,8 @@ except ImportError:
 __author__ = "Matt Giguere (github: @mattgiguere)"
 __maintainer__ = "Matt Giguere"
 __email__ = "matthew.giguere@yale.edu"
-__status__ = " Development NOT(Prototype or Production)"
-__version__ = '0.0.1'
+__status__ = "Production"
+__version__ = '1.0.0'
 
 
 def blazeFit(wav, spec, maxrms, numcalls=10, curcall=0,
