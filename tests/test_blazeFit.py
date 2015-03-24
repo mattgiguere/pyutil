@@ -63,7 +63,7 @@ def test_with_show_plot():
     def spec(x):
         return np.exp(-(x - 5040.)**2/1000.)
 
-    polynomial_fit_values = bf.blazeFit(wav, spec(wav), 5e-2, showplot=True)
+    polynomial_fit_values = bf.blazeFit(wav, spec(wav), 5e-2)#, showplot=True)
     assert len(polynomial_fit_values) == 8
 
 
