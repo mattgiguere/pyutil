@@ -77,9 +77,9 @@ def getChironSpec(obnm, normalized=True, slit='slit', normmech='flat', returnFla
             #will use the top 0.5%, which corresponds
             #to 16 elements for CHIRON:
             nummax = np.int(np.ceil(0.005 * len(normspec)))
-            #now sort normspec and find the mean of the
+            #now sort normspec and find the median of the
             #`nummax` highest values in the old normspec
-            mnhghval = np.mean(np.sort(normspec)[-nummax:-1])
+            mnhghval = np.median(np.sort(normspec)[-nummax:-1])
             #now renormalize by that value:
             normspecout[ord, :, 1] = normspec / mnhghval
             normspecout[ord, :, 0] = scidata[ord, :, 0]
